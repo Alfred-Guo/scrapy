@@ -10,7 +10,7 @@ class Springer(Spd):
         super(Springer,self).__init__('springer','springer')
     
     def getUrls(self):
-        return [('http://www.springer.com/cn/book/9781461471370',{'file':'te'})]
+        return [('http://www.springer.com/cn/book/9781461471370',{'file':'test'})]
                 
 if __name__=='__main__':
     springer=Springer()
