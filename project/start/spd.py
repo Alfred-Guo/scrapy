@@ -47,7 +47,7 @@ class Spd():
         urls=self._partition(urls,num)
         for i in range(len(urls)):
             process.crawl(spider,urls=urls[i],part=i,suf=self.suf)
-            process.start()
+        process.start()
                     
     def _partition(self,_list,num):
         from math import ceil
