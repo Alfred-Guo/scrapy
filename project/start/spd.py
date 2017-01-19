@@ -17,7 +17,7 @@ class Spd():
             'SITE':site,
         }
         for i in custom_settings.keys():
-            self.custom_settings=custom_settings[i]
+            self.custom_settings[i]=custom_settings[i]
         self.clean()
         
     def clean(self):
