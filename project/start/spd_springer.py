@@ -5,13 +5,16 @@ Created on Fri Dec 16 15:10:10 2016
 """
 from spd import Spd
 
+
 class Springer(Spd):
     def __init__(self):
-        super(Springer,self).__init__('springer','springer')
+        super(Springer, self).__init__('springer', 'springer')
     
     def getUrls(self):
-        return [('http://www.springer.com/cn/book/9781461471370',{'file':'test'})]
-                
+        return [('http://www.springer.com/cn/book/9781461471370', 
+                 {'file': 'test'})]
+
+                 
 if __name__=='__main__':
-    springer=Springer()
+    springer = Springer()
     springer.start_crawl()
