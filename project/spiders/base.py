@@ -15,7 +15,8 @@ class myBaseSpider(scrapy.Spider):
     
     name = "base"
     
-    @classmethodef from_crawler(cls, crawler, urls, part, suf):
+    @classmethod
+    def from_crawler(cls, crawler, urls, part, suf):
         crawler.PART = part
         crawler.SUF = suf
         crawler.FILE_ = crawler.settings.get('FILE_')
