@@ -14,7 +14,7 @@ CRAWL_DICT = {
             'copyright_holder', 'ebook_isbn', 'doi', 'hardcover_isbn', 
             'softcover_isbn', 'series_issn', 'edition_number', 
             'page_num', 'illu_table_num', 'topics', 'editors', 'url', 
-            'create_date', 'file'
+            'create_date'
         ],
         # 'meta': {'foo': {}},
         # 'errback': {'foo': ''},
