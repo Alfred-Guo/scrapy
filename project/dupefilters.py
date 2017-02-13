@@ -46,7 +46,7 @@ class RFPDupeFilter(BaseDupeFilter):
 
     def request_seen(self, request):
         if request.meta['retry']==True:
-            return
+            return False
         fp = self.request_fingerprint(request)
         if fp in self.fingerprints:
             return True

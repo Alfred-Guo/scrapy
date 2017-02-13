@@ -2,20 +2,20 @@ import random
 
 class ProxyMiddleware(object):
     def __init__(self):
-        f=open()
-        self.Proxies=[l.strip('\n') for l in f]
-        f.close()
+        fobj = open()
+        self.Proxies = [l.strip('\n') for l in fobj]
+        fobj.close()
         
     def process_request(self, request, spider):
         if not self.Proxies:
             return
-        proxy=random.choice(self.Proxies)
+        proxy = random.choice(self.Proxies)
         print('Proxy:%s' %proxy)
         request.meta['proxy'] = "http://%s" % proxy
         
 class RandomUserAgent(object):
     def __init__(self):
-        self.agents=self.proxy()
+        self.agents = self.proxy()
 
     def process_request(self, request, spider):
         agent=random.choice(self.agents)
