@@ -27,7 +27,6 @@ class springerItem(basicItem):
     illu_table_num = scrapy.Field()
     topics = scrapy.Field()
     editors = scrapy.Field()
-    file = scrapy.Field()
     
     def __init__(self):
         basicItem.__init__(self)
