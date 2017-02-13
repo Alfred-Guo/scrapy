@@ -4,6 +4,7 @@ Created on Fri Dec 16 15:10:10 2016
 @author: Alfred
 """
 import os
+from math import ceil
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.getcwd())))
 
@@ -53,7 +54,6 @@ class Spd():
         process.start()
                     
     def _partition(self, data_list, num):
-        from math import ceil
         delta = ceil(len(data_list) / num)
         partition = range(0, len(data_list), delta)
         return [data_list[i:i + delta] for i in partition]
