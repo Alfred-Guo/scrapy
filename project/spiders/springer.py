@@ -6,7 +6,7 @@ Created on Wed Dec 28 14:54:36 2016
 """
 from datetime import datetime as dt
 
-from project.items import springerItem
+from project.items import SpringerItem
 
 
 KEYS = {
@@ -29,41 +29,45 @@ KEYS = {
     'Topics': 'topics',
     'Authors': 'editors',
 }
-    
-    
+
+
 def springer(response):
-    item = springerItem()
+    """
+    parse, used to process book url
+    """
+
+    item = SpringerItem()
     for key in item.fields.keys():
         item[key] = ''
-        
-    for i in range(1,4):
-        for i2 in range(1,10):
+
+    for i in range(1, 4):
+        for i2 in range(1, 10):
             key = response.xpath(
                 '//div[@class="product-bibliographic"]/dl/dd/'\
                 'div/div/dl[%s]/dt[%s]/text()' % (i, i2)
             ).extract_first()
-            
+
             info = response.xpath(
                 '//div[@class="product-bibliographic"]/dl/dd/'\
                 'div/div/dl[%s]/dd[%s]/text()' % (i, i2)
             ).extract()
-            
+
             if not key:
                 continue
-            
-            if key=='Editors' or key=='Authors':
-                info=';'.join(response.xpath(
+
+            if key == 'Editors' or key == 'Authors':
+                info = ';'.join(response.xpath(
                     '//div[@class="product-bibliographic"]/dl/dd/div/'\
                     'div/dl[%s]/dd[%s]/ul//span/text()' % (i, i2)
                     ).extract()
                 )
-            elif key=='Publisher':
+            elif key == 'Publisher':
                 info = response.xpath(
                     '//div[@class="product-bibliographic"]/dl/dd/div/'\
                     'div/dl[%s]/dd[%s]/span/text()' % (i, i2)
                 ).extract_first()
-            elif key=='Topics':
-                info=';'.join(response.xpath(
+            elif key == 'Topics':
+                info = ';'.join(response.xpath(
                     '//div[@class="product-bibliographic"]/dl/dd/div/'\
                     'div/dl[%s]/dd[%s]/ul/li/a/text()' % (i, i2)
                     ).extract()

@@ -8,62 +8,43 @@ from importlib import import_module
 
 import scrapy
 
-from project.setups import CRAWL_DICT
 
+class BaseSpider(scrapy.Spider):
+    """
+    base spider used for all crawling
+    """
 
-class myBaseSpider(scrapy.Spider):
-    
     name = "base"
-    
-    @classmethod
-    def from_crawler(cls, crawler, urls, part, suf):
-        crawler.PART = part
-        crawler.SUF = suf
-        crawler.FILE_ = crawler.settings.get('FILE_')
-        return cls(crawler, urls)
 
-    def __init__(self, crawler, urls):
-        super(myBaseSpider, self).set_crawler(crawler)
+    def __init__(self, urls):
+        super(BaseSpider, self).__init__()
         self.urls = urls
 
     def start_requests(self):
+        """
+        start crawl
+        """
+        
+        crawl_dict = self.settings.get('CRAWL_DICT')
         dir_name = self.settings.get('DIR_NAME')
         site = self.settings.get('SITE')
 
-        crawl_dict = CRAWL_DICT[dir_name]
-
+        para = {}
         module = import_module('.%s' % dir_name, 'project.spiders')
 
         callback = crawl_dict['parse']
-        if type(callback) == dict:
+        if isinstance(callback, dict):
             callback = callback[site]
-        callback = getattr(module, callback)
+        para['callback'] = getattr(module, callback)
 
-        errback = self.baseErrback
-        if 'errback' in crawl_dict.keys():
-            if site in crawl_dict['errback'].keys():
-                errback = crawl_dict['errback'][site]
-                errback = getattr(module, errback)
-
-        meta = {}
-        if 'meta' in crawl_dict.keys():
-            if site in crawl_dict['meta'].keys():
-                meta = crawl_dict['meta'][site]
+        errback = crawl_dict.get('errback', {}).get(site)
+        if errback:
+            para['errback'] = getattr(module, errback)
 
         for url in self.urls:
-            meta['para'] = url[1].copy()
-            if 'parse' in meta['para'].keys():
-                parse = meta['para']['parse']
-                if 'callback' in parse.keys():
-                    _callback = getattr(module, parse['callback'])
-                else:
-                    _callback = callback
-                if 'errback' in parse.keys():
-                    _errback = getattr(module, parse['errback'])
-                else:
-                    _errback = errback
-                yield scrapy.Request(url[0], callback=_callback, 
-                                     errback=_errback, meta=meta.copy())
-            else:
-                yield scrapy.Request(url[0], callback=callback, 
-                                     errback=errback, meta=meta.copy())
+            para['url'] = url[0]
+            para['meta'] = {'para': url[1].copy()}
+            yield scrapy.Request(**para)
+
+    def parse(self, response):
+        pass
