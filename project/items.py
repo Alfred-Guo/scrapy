@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
-# Define here the models for your scraped items
-#
-# See documentation in:
-# http://doc.scrapy.org/en/latest/topics/items.html
+"""
+@author: Alfred
+"""
 
 import scrapy
-from project.basicItems import basicItem
+from project.basic_items import BasicItem
 
 
-class springerItem(basicItem):
+class SpringerItem(BasicItem):
+    """
+    item for springer
+    """
+
     title = scrapy.Field()
     subtitle = scrapy.Field()
     editors = scrapy.Field()
@@ -27,6 +30,7 @@ class springerItem(basicItem):
     illu_table_num = scrapy.Field()
     topics = scrapy.Field()
     editors = scrapy.Field()
-    
+    file = scrapy.Field()
+
     def __init__(self):
-        basicItem.__init__(self)
+        BasicItem.__init__(self)
