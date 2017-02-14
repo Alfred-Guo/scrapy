@@ -7,14 +7,27 @@ from spd import Spd
 
 
 class Springer(Spd):
+    """
+    springer spider
+    """
+
     def __init__(self):
-        super(Springer, self).__init__('springer', 'springer')
-    
-    def getUrls(self):
-        return [('http://www.springer.com/cn/book/9781461471370', 
+        custome_settings={
+            'DIR_NAME': 'springer',
+            'SITE': 'springer',
+        }
+        super(Springer, self).__init__(custome_settings)
+
+    @staticmethod
+    def get_urls():
+        """
+        generate the book url to crawl
+        """
+
+        return [('http://www.springer.com/cn/book/9781461471370',
                  {'file': 'test'})]
 
-                 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     springer = Springer()
     springer.start_crawl()

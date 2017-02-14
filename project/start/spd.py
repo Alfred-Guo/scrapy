@@ -11,49 +11,61 @@ sys.path.append(os.path.dirname(os.path.dirname(os.getcwd())))
 from scrapy.utils.project import get_project_settings
 from scrapy.crawler import CrawlerProcess
 
-from project.spiders.base import myBaseSpider
+from project.constants import CRAWL_DICT
+from project.spiders.base import BaseSpider
 
 
 class Spd():
-    def __init__(self, dir_name, site, custom_settings={}):
+    """
+    basic class used for multiple spiders
+    """
+
+    def __init__(self, custom_settings):
         os.environ['SCRAPY_SETTINGS_MODULE'] = 'project.settings'
-        self.suf = ''
-        self.dir_name = dir_name
-        self.site = site
+
+        dir_name = custom_settings['DIR_NAME']
         self.custom_settings = {
-            'DIR_NAME': dir_name,
-            'SITE': site,
+            'CRAWL_DICT': CRAWL_DICT[dir_name],
         }
-        for i in custom_settings.keys():
-            self.custom_settings[i] = custom_settings[i]
-        self.clean()
-        
-    def clean(self):
+        self.custom_settings.update(custom_settings)
+
+    def get_urls(self):
+        """
+        generate the urls to crawl. Should be overrided in a child class
+        """
         pass
-    
-    def getUrls(self):
-        pass
-    
+
     def start_crawl(self, num=1):
-        urls = self.getUrls()
+        """
+        start crawl
+        """
+
+        urls = self.get_urls()
         if urls:
-            self._crawl(self.custom_settings, urls, num)
-            
-    def _crawl(self, custom_settings, urls, num=5):
+            self._crawl(urls, num)
+
+    def _crawl(self, urls, num):
+        """
+        run spider in script
+        """
+
         project_settings = get_project_settings()
-        
-        for key in custom_settings:
-            project_settings[key] = custom_settings[key]
+        project_settings.update(self.custom_settings)
         process = CrawlerProcess(project_settings)
-        
-        spider = myBaseSpider
-        
+
+        spider = BaseSpider
+
         urls = self._partition(urls, num)
-        for i in range(len(urls)):
-            process.crawl(spider, urls=urls[i], part=i, suf=self.suf)
+        for i in urls:
+            process.crawl(spider, urls=i)
         process.start()
-                    
-    def _partition(self, data_list, num):
+
+    @staticmethod
+    def _partition(data_list, num):
+        """
+        cut url list
+        """
+
         delta = ceil(len(data_list) / num)
         partition = range(0, len(data_list), delta)
         return [data_list[i:i + delta] for i in partition]
