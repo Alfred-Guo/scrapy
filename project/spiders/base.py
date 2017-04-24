@@ -4,8 +4,6 @@ Created on Tue Nov 15 10:32:57 2016
 
 @author: Alfred
 """
-from importlib import import_module
-
 import scrapy
 
 
@@ -24,27 +22,19 @@ class BaseSpider(scrapy.Spider):
         """
         start crawl
         """
-        
-        crawl_dict = self.settings.get('CRAWL_DICT')
-        dir_name = self.settings.get('DIR_NAME')
-        site = self.settings.get('SITE')
-
-        para = {}
-        module = import_module('.%s' % dir_name, 'project.spiders')
-
-        callback = crawl_dict['parse']
-        if isinstance(callback, dict):
-            callback = callback[site]
-        para['callback'] = getattr(module, callback)
-
-        errback = crawl_dict.get('errback', {}).get(site)
-        if errback:
-            para['errback'] = getattr(module, errback)
-
-        for url in self.urls:
-            para['url'] = url[0]
-            para['meta'] = {'para': url[1].copy()}
-            yield scrapy.Request(**para)
+        for name, func in self.settings['PARSE'].items():
+            setattr(self, name, func)
+        for url, meta in self.urls:
+            yield scrapy.Request(
+                url=url,
+                callback=getattr(self, self.settings.get('CALLBACK')),
+                errback=self.settings.get('ERRORBACK', self.errback),
+                meta={'para': meta.copy()}
+            )
 
     def parse(self, response):
+        pass
+
+    @staticmethod
+    def errback():
         pass
