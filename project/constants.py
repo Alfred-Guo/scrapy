@@ -4,23 +4,6 @@ Created on Tue Nov 15 10:56:24 2016
 
 @author: Alfred
 """
-CRAWL_DICT = {
-    'springer': {
-        'domains': ['springer.com'],
-        'parse': 'springer',
-        'field_to_export': [
-            'title', 'subtitle', 'editors', 'series_title',
-            'series_volume', 'copy_right', 'publisher',
-            'copyright_holder', 'ebook_isbn', 'doi', 'hardcover_isbn',
-            'softcover_isbn', 'series_issn', 'edition_number',
-            'page_num', 'illu_table_num', 'topics', 'editors', 'url',
-            'create_date', 'file'
-        ],
-        # 'meta': {'foo': {}},
-        # 'errback': {'foo': ''},
-    },
-}
-
 USER_AGENT = [
     'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)',
     'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Acoo Browser; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)',

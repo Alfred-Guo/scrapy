@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 """
+Created on Fri Apr 18 17:01:10 2017
 @author: Alfred
 """
 import csv
-from datetime import datetime as dt
+
+#from utils.db_con import DBcon
 
 
-class CsvPipeline(object):
+class CsvPipeline():
     """
     Pipeline to csv file
     """
@@ -16,26 +18,18 @@ class CsvPipeline(object):
         """
         Get item fields and file path through crawler
         """
+        return cls(crawler.settings)
 
-        path = crawler.settings.get('DATA_PATH')
-        dir_name = crawler.settings.get('DIR_NAME')
-        site = crawler.settings.get('SITE')
-
-        flds = crawler.settings.get('CRAWL_DICT')['field_to_export']
-
-        return cls(path, dir_name, site, flds)
-
-    def __init__(self,path, dir_name, site, flds):
-        self.flds = flds
-        file_path = '%s/%s/%s_%s.csv' \
-            % (path, dir_name, site, dt.today().strftime('%Y-%m-%d'))
-        self.writer = csv.writer(open(file_path, 'a'))
+    def __init__(self, settings):
+        self.flds = settings.get('field_to_export')
+        self.writer = csv.writer(
+            open(settings['FILE_PATH'], 'a', encoding='utf-8', newline='')
+        )
 
     def process_item(self, item, spider):
         """
         write file
         """
-
         row = []
         for fld in self.flds:
             try:
@@ -45,3 +39,26 @@ class CsvPipeline(object):
             except:
                 row.append(item[fld])
         self.writer.writerow(row)
+
+
+class SQLite3Pipeline():
+    """
+    1
+    """
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        """
+        1
+        """
+        return cls(crawler.settings)
+
+    def __init__(self, settings):
+        self.tbl = settings.get('TBL')
+        self.db = DBcon()
+
+    def process_item(self, item, spider):
+        """
+        write file
+        """
+        self.db.sqlite_insert(self.tbl, [item])
